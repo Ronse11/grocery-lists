@@ -18,6 +18,22 @@ if (!isset($_SESSION['logged_in'])) {
     <div class="container-fluid d-flex justify-content-center">
         <div class="tab-content d-flex my-5 justify-content-center" id="v-pills-tabContent" style="width: 100%;">
             <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+
+                    <div class="container d-flex justify-content-center py-2 mb-3" style="font-size: .8rem">
+                        <div class="search_main">
+                            <div class="student_search">
+                                <form action="" method="POST">
+                                    <input type="hidden" name="userID" value="<?= $_SESSION['u_id'] ?>">
+                                    <input class="border-primary rounded-2 px-2 py-1 " type="text" name="user_items" value="" placeholder="Search Item">
+                                    <input class="text-primary border-primary rounded-2 px-2 py-1" type="submit" name="search" value="Search">
+                                </form>
+                                <?php
+                                include 'search.php'
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    
                 <div class="px-4 position-relative" style="font-size: .7rem;">
                     <?php if (isset($_GET['confirm'])) { ?>
                         <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
@@ -79,13 +95,25 @@ if (!isset($_SESSION['logged_in'])) {
                         </thead>
                         <tbody align="center">
 
-                            <tr>
-                                <?php
-                                $userID = $_SESSION['u_id'];
-                                $cnt = 1;
-                                $select = $conn->prepare("SELECT * FROM items WHERE user_id = ?");
-                                $select->execute([$userID]);
-                                foreach ($select as $selects) { ?>
+                            <?php
+                            $id = $_SESSION['u_id'];
+                            $getID = $conn->prepare("SELECT COUNT(*) FROM items WHERE user_id=?");
+                            $getID->execute([$id]);
+
+                            $totalItems = $getID->fetchColumn();
+
+                            $itemsPerPage = 5;
+                            $cnt = 1;
+
+                            $currentPage = isset($_GET['page']) ? max(1, $_GET['page']) : 1;
+
+                            $offset = ($currentPage - 1) * $itemsPerPage;
+
+                            $getItems = $conn->prepare("SELECT * FROM items WHERE user_id=? LIMIT $offset, $itemsPerPage");
+                            $getItems->execute([$id]);
+
+                            foreach ($getItems as $selects) { ?>
+                                <tr>
 
                                     <th class="px-md-4" scope="row"><?= $cnt++ ?></th>
                                     <td class="px-md-4" align="start"><?= $selects['user_items'] ?></td>
@@ -107,12 +135,46 @@ if (!isset($_SESSION['logged_in'])) {
                                         </div>
                                     </td>
 
-                            </tr>
+                                </tr>
 
-                        <?php } ?>
+                            <?php } ?>
                         </tbody>
+
                     </table>
                 </div>
+                <?php
+                if (empty($totalItems)) { ?>
+                    <div class="container d-flex justify-content-center ">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+
+                            </ul>
+                        </nav>
+                    </div>
+                <?php } else { ?>
+                    <div class="container d-flex justify-content-center ">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link user-select-none " aria-label="Previous">
+                                        <span aria-hidden="true">•</span>
+                                    </a>
+                                </li>
+                                <?php
+                                for ($i = 1; $i <= ceil($totalItems / $itemsPerPage); $i++) { ?>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                    </li>
+                                <?php } ?>
+                                <li class="page-item">
+                                    <a class="page-link user-select-none" aria-label="Next">
+                                        <span aria-hidden="true">•</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                <?php } ?>
             </div>
 
             <div class="tab-pane fade show" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0" style="width: 500px; height: 310px; font-size: .7rem;">
@@ -192,7 +254,7 @@ if (!isset($_SESSION['logged_in'])) {
                                     </div>
                                     <a type="button" class="text-decoration-none position-absolute top-0 start-100 translate-middle" style="width: 15px;" onclick="removeInput(this)"><small>❌</small></a>
                                 </div>
-                            </div>    
+                            </div>
                             <div class="my-1 text-center">
                                 <a type="button" class="text-decoration-none" onclick="addInput()">
                                     <h1 class="text-success">+</h1>

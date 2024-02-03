@@ -148,4 +148,32 @@ if (isset($_GET['clear'])) {
     exit();
 }
 
+// EDIT PROFILE
+if(isset($_POST['editProfile'])) {
+    $userID = $_POST['userID'];
+    $fName = $_POST['fName'];
+    $lName = $_POST['lName'];
+    $email = $_POST['email'];
+    $pass1 = $_POST['pass1'];
+    $pass2 = $_POST['pass2'];
+
+    if ($pass1 == $pass2) {
+        $hash = password_hash($pass1, PASSWORD_DEFAULT);
+
+        $insertUser = $conn->prepare("UPDATE users SET user_fname=?, user_lname=?, user_email=?, user_pass=? WHERE user_id=?");
+        $insertUser->execute([
+            $fName,
+            $lName,
+            $email,
+            $hash,
+            $userID
+        ]);
+
+        header("Location: index.php");
+        exit();
+    }
+    
+}
+
+$pdo = null;
 ?>

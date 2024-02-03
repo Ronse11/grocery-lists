@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 30, 2023 at 09:58 AM
+-- Generation Time: Feb 02, 2024 at 10:01 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -66,11 +66,15 @@ CREATE TABLE `items` (
 INSERT INTO `items` (`p_id`, `user_id`, `user_items`, `user_price`, `quantity`) VALUES
 (92, 2, 'Mate', 4, 5),
 (93, 2, 'Milo', 10, 5),
-(94, 1, 'Coffee', 10, 5),
+(94, 1, 'Coffee', 8, 5),
 (96, 1, 'Choco', 20, 4),
 (99, 5, 'Milo', 10, 5),
 (101, 5, 'Coffee', 10, 3),
-(102, 5, 'Choco', 20, 4);
+(102, 5, 'Choco', 20, 4),
+(111, 1, 'Mate', 2, 1),
+(112, 1, 'Ha', 23, 3),
+(113, 1, 'Bruh', 14, 5),
+(116, 1, 'CHoco', 3, 5);
 
 -- --------------------------------------------------------
 
@@ -91,10 +95,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_fname`, `user_lname`, `user_email`, `user_pass`) VALUES
-(1, 'Ron', 'Ser', 'Ron@gmail.com', '$2y$10$ieODRIxd.b0ft03q/2E18.SCBcb.dt.kNoipSsLgzd/mxsNWTj6pa'),
-(2, 'Ceb', 'Riv', 'Ceb@gmail.com', '$2y$10$WWT/QyvLqIUkrhrfeOf6IOfFy6BCkegjKYa4izC0iuc7DpCMSjrAC'),
+(1, 'Ronald', 'Seron', 'Ron@gmail.com', '$2y$10$LIT5IRYFg8LASLj988k.F.gjj6WCBQq99GmBs9rlVLQAxFTNAPnYC'),
 (5, 'Lali', 'Dua', 'Dua@gmail.com', '$2y$10$Iw.BTjBLfT/VdCpRKTe.lOP1k2zoBFx2lnxjQne2V2MkiCfBS7Ps6'),
-(8, 'Lee', 'Bat', 'Lee@gmail.com', '$2y$10$/2/9j887dn6g2NODqMQZE.gCmKtXpTdiV/xR8LqExQO/A1YRGcrHq');
+(8, 'Lee', 'Bat', 'Lee@gmail.com', '$2y$10$/2/9j887dn6g2NODqMQZE.gCmKtXpTdiV/xR8LqExQO/A1YRGcrHq'),
+(9, 'Dey', 'Ser', 'Dey@gmail.com', '$2y$10$R4yoi65PzVXLrwCgE9Gvf.z.mTLnziLY1r3vkwVRpYhpxrbLwjoWK');
 
 --
 -- Indexes for dumped tables
@@ -126,13 +130,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
